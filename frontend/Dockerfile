@@ -7,3 +7,5 @@ RUN echo '<h1>Frontend rodando no Kubernetes!</h1><div id="status">Conectando ao
 
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
+
+#teste
