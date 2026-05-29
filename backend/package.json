@@ -1,0 +1,9 @@
+{
+  "name": "peopleflow-backend",
+  "version": "1.0.0",
+  "description": "API de RH para o PeopleFlow",
+  "main": "server.js",
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}

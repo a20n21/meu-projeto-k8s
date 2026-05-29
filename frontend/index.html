@@ -3,84 +3,172 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Matias IT Consulting - Portal de Serviços</title>
+    <title>PeopleFlow - Gestão de RH</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-slate-900 text-slate-100 font-sans min-h-screen flex flex-col justify-between">
-    <header class="border-b border-slate-800 bg-slate-900/50 backdrop-blur">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-                <div class="bg-indigo-600 text-white p-2 rounded-lg font-bold tracking-wider text-sm">MI|T</div>
-                <span class="font-semibold text-lg tracking-tight bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">Matias IT Consulting</span>
-            </div>
-            <div class="flex items-center space-x-2">
-                <span class="relative flex h-3 w-3"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span><span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span></span>
-                <span class="text-xs text-slate-400 font-medium">Cluster Local OK</span>
-            </div>
+
+    <header class="border-b border-slate-800 bg-slate-900/50 backdrop-blur h-16 flex items-center justify-between px-6">
+        <div class="flex items-center space-x-3">
+            <div class="bg-indigo-600 text-white p-2 rounded-lg font-bold tracking-wider text-xs">P|F</div>
+            <span class="font-semibold text-lg tracking-tight text-white">PeopleFlow RH</span>
         </div>
+        <button id="btn-logout" class="hidden text-xs bg-slate-800 hover:bg-rose-950 text-slate-400 hover:text-rose-400 px-3 py-1.5 rounded-lg font-medium transition">Sair</button>
     </header>
-    <main class="max-w-4xl mx-auto px-4 py-12 flex-grow flex flex-col justify-center w-full">
-        <div class="text-center space-y-4 mb-12">
-            <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight text-white">Frontend executando no <span class="bg-gradient-to-r from-indigo-400 to-cyan-400 bg-clip-text text-transparent">Kubernetes</span></h1>
-            <p class="text-slate-400 text-lg max-w-xl mx-auto">Ambiente de microsserviços integrado com sucesso via esteira automatizada de GitOps e Argo CD.</p>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
-            <div class="bg-slate-800/50 border border-slate-700/60 rounded-2xl p-6 shadow-xl">
-                <div class="flex items-center space-x-3 mb-4">
-                    <div class="p-2 bg-indigo-500/10 text-indigo-400 rounded-lg"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg></div>
-                    <h2 class="text-xl font-bold text-white">Status do Frontend</h2>
-                </div>
-                <p class="text-sm text-slate-400 mb-4">Informações do container do servidor web gerenciado pelo cluster.</p>
-                <div class="space-y-2 border-t border-slate-700/50 pt-4 text-sm">
-                    <div class="flex justify-between"><span class="text-slate-500">Servidor:</span> <span class="text-slate-300 font-mono">Nginx Alpine</span></div>
-                    <div class="flex justify-between"><span class="text-slate-500">Porta Externa:</span> <span class="text-indigo-400 font-mono font-semibold">30080</span></div>
-                </div>
+
+    <main class="max-w-4xl mx-auto px-4 py-8 flex-grow flex items-center justify-center w-full">
+        
+        <div id="view-login" class="bg-slate-800/40 border border-slate-700/50 rounded-2xl p-8 shadow-2xl max-w-sm w-full space-y-6">
+            <div class="text-center space-y-2">
+                <h2 class="text-2xl font-bold text-white">Acesse o Portal</h2>
+                <p class="text-xs text-slate-400">Use admin / matias123 para testar</p>
             </div>
-            <div class="bg-slate-800/50 border border-slate-700/60 rounded-2xl p-6 shadow-xl">
-                <div class="flex items-center space-x-3 mb-4">
-                    <div class="p-2 bg-cyan-500/10 text-cyan-400 rounded-lg"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg></div>
-                    <h2 class="text-xl font-bold text-white">Dados do Backend (API)</h2>
+            <form id="form-login" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-medium text-slate-400 mb-1">Usuário</label>
+                    <input type="text" id="login-user" required class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
                 </div>
-                <div class="border-t border-slate-700/50 pt-4">
-                    <div id="status-card" class="bg-slate-900/60 border border-slate-700 p-4 rounded-xl min-h-[64px] flex flex-col gap-3">
-                        <span id="status" class="text-sm font-medium text-amber-400 flex items-center gap-2">Conectando à API do backend...</span>
-                        <ul id="lista-servicos" class="text-xs space-y-2 hidden">
-                            </ul>
+                <div>
+                    <label class="block text-xs font-medium text-slate-400 mb-1">Senha</label>
+                    <input type="password" id="login-pass" required class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+                </div>
+                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-medium text-sm py-2 rounded-lg transition shadow-lg shadow-indigo-600/20">Entrar</button>
+            </form>
+            <p id="login-erro" class="text-xs text-rose-400 text-center font-medium hidden">⚠️ Credenciais inválidas!</p>
+        </div>
+
+        <div id="view-dashboard" class="w-full space-y-8 hidden">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="md:col-span-1 bg-slate-800/40 border border-slate-700/50 rounded-2xl p-5 space-y-4 h-fit">
+                    <h3 class="text-base font-bold text-white">Novo Colaborador</h3>
+                    <form id="form-cadastro" class="space-y-3">
+                        <div>
+                            <label class="block text-[11px] font-medium text-slate-400 mb-1">Nome Completo</label>
+                            <input type="text" id="cad-nome" required class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-indigo-500">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-medium text-slate-400 mb-1">Cargo</label>
+                            <input type="text" id="cad-cargo" required class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-indigo-500">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-medium text-slate-400 mb-1">Departamento</label>
+                            <input type="text" id="cad-dept" required class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-indigo-500">
+                        </div>
+                        <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-medium text-xs py-2 rounded-lg transition">Adicionar</button>
+                    </form>
+                </div>
+
+                <div class="md:col-span-2 bg-slate-800/40 border border-slate-700/50 rounded-2xl p-5 space-y-4">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-base font-bold text-white">Quadro de Colaboradores</h3>
+                        <span id="contador-func" class="bg-indigo-500/10 text-indigo-400 text-[10px] font-bold px-2 py-0.5 rounded-full border border-indigo-500/20">0 Total</span>
+                    </div>
+                    <div class="overflow-hidden rounded-xl border border-slate-800 bg-slate-950/40">
+                        <table class="w-full text-left text-xs text-slate-300">
+                            <thead class="bg-slate-950 text-slate-400 font-medium border-b border-slate-800 text-[11px]">
+                                <tr>
+                                    <th class="p-3">Nome</th>
+                                    <th class="p-3">Cargo</th>
+                                    <th class="p-3">Departamento</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabela-corpo">
+                                </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
     </main>
-    <footer class="border-t border-slate-800 py-6 text-center text-xs text-slate-500">&copy; 2026 Matias IT Consulting. Desenvolvido em ambiente Kubernetes local (Kind).</footer>
+
+    <footer class="border-t border-slate-800 py-4 text-center text-[10px] text-slate-500">
+        &copy; 2026 PeopleFlow by Matias IT Consulting. Ambiente Kubernetes via Ingress.
+    </footer>
+
     <script>
-        const statusEl = document.getElementById("status");
-        const cardEl = document.getElementById("status-card");
-        const listaEl = document.getElementById("lista-servicos");
-        fetch("/api")
-            .then(res => { if (!res.ok) throw new Error(); return res.json(); })
+        const viewLogin = document.getElementById('view-login');
+        const viewDashboard = document.getElementById('view-dashboard');
+        const btnLogout = document.getElementById('btn-logout');
+        
+        // 1. Controle de Sessão no carregamento da página
+        if (localStorage.getItem('userToken')) {
+            exibirDashboard();
+        }
+
+        // 2. Evento de Login
+        document.getElementById('form-login').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const usuario = document.getElementById('login-user').value;
+            const senha = document.getElementById('login-pass').value;
+            const erroEl = document.getElementById('login-erro');
+
+            fetch('/api/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ usuario, senha })
+            })
+            .then(res => { if(!res.ok) throw new Error(); return res.json(); })
             .then(data => {
-                cardEl.classList.remove("border-slate-700");
-                cardEl.classList.add("border-emerald-500/30", "bg-emerald-500/5");
-                statusEl.className = "text-sm font-semibold text-emerald-400";
-                statusEl.innerHTML = "✅ " + data.message;
-                
-                // Trata e exibe os dados vindos do backend
-                if(data.servicos) {
-                    listaEl.classList.remove("hidden");
-                    listaEl.innerHTML = data.servicos.map(s => 
-                        `<li class="flex justify-between bg-slate-900/80 p-2 rounded border border-slate-800">
-                            <span class="text-slate-300 font-medium">${s.nome}</span>
-                            <span class="px-2 py-0.5 rounded text-[10px] font-bold ${s.status === 'Ativo' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-amber-500/10 text-amber-400'}">${s.status}</span>
-                         </li>`
-                    ).join('');
+                if(data.success) {
+                    localStorage.setItem('userToken', data.token);
+                    erroEl.classList.add('hidden');
+                    exibirDashboard();
                 }
             })
-            .catch(() => {
-                cardEl.classList.remove("border-slate-700");
-                cardEl.classList.add("border-rose-500/30", "bg-rose-500/5");
-                statusEl.className = "text-sm font-semibold text-rose-400";
-                statusEl.innerText = "❌ Sem comunicação com o backend (/api).";
+            .catch(() => { erroEl.classList.remove('hidden'); });
+        });
+
+        // 3. Evento de Logout
+        btnLogout.addEventListener('click', function() {
+            localStorage.removeItem('userToken');
+            viewDashboard.classList.add('hidden');
+            btnLogout.classList.add('hidden');
+            viewLogin.classList.remove('hidden');
+        });
+
+        // 4. Exibir o Painel e buscar dados
+        function exibirDashboard() {
+            viewLogin.classList.add('hidden');
+            viewDashboard.classList.remove('hidden');
+            btnLogout.classList.remove('hidden');
+            carregarFuncionarios();
+        }
+
+        // 5. Buscar Funcionários no Backend
+        function carregarFuncionarios() {
+            fetch('/api/funcionarios')
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('contador-func').innerText = `${data.length} Total`;
+                const corpo = document.getElementById('tabela-corpo');
+                corpo.innerHTML = data.map(f => `
+                    <tr class="border-b border-slate-800/60 hover:bg-slate-800/20 transition">
+                        <td class="p-3 font-medium text-white">${f.nome}</td>
+                        <td class="p-3 text-slate-400">${f.cargo}</td>
+                        <td class="p-3 text-indigo-400"><span class="bg-indigo-500/5 px-2 py-0.5 rounded border border-indigo-500/10">${f.departamento}</span></td>
+                    </tr>
+                `).join('');
             });
+        }
+
+        // 6. Evento de Cadastro de Novo Funcionário
+        document.getElementById('form-cadastro').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const nome = document.getElementById('cad-nome').value;
+            const cargo = document.getElementById('cad-cargo').value;
+            const departamento = document.getElementById('cad-dept').value;
+
+            fetch('/api/funcionarios', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ nome, cargo, departamento })
+            })
+            .then(res => { if(!res.ok) throw new Error(); return res.json(); })
+            .then(() => {
+                document.getElementById('form-cadastro').reset();
+                carregarFuncionarios(); // Atualiza a tabela na hora!
+            });
+        });
     </script>
 </body>
 </html>
