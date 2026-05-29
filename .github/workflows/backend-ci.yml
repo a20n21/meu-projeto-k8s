@@ -4,7 +4,7 @@ on:
   push:
     branches: [ main, master ]
     paths:
-      - 'backend/**'
+      - 'backend/**' # Só dispara se houver alterações na pasta backend
 
 jobs:
   build-backend:
@@ -14,23 +14,20 @@ jobs:
     - name: Checkout do Código
       uses: actions/checkout@v4
 
-    - name: Build da Imagem Docker Backend
+    - name: Baixar o Kind Local na Pipeline do Runner
       run: |
-        echo "Iniciando o build da imagem do backend..."
-        docker build -t meu-backend:${{ github.sha }} ./backend
+        echo "Baixando o binário do Kind para a workspace do Runner..."
+        curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.22.0/kind-linux-amd64
+        chmod +x ./kind
 
-    - name: Injetar Imagem Direto no Containerd do Kind
+    - name: Build e Injeção no Kind via Rede
+      env:
+        DOCKER_HOST: tcp://192.168.100.11:2375
       run: |
-        echo "Exportando imagem para arquivo TAR..."
-        docker save meu-backend:${{ github.sha }} -o backend.tar
+        echo "Fazendo o build remoto usando o Docker da VM do Kubernetes..."
+        docker build -t meu-backend:${{ github.sha }} ./backend
+        docker tag meu-backend:${{ github.sha }} meu-backend:latest
         
-        echo "Copiando o arquivo TAR para dentro do nó do Kind..."
-        docker cp backend.tar k8s-local-control-plane:/backend.tar
-        
-        echo "Importando a imagem diretamente no runtime do Kubernetes (containerd)..."
-        docker exec k8s-local-control-plane ctr -n k8s.io images import /backend.tar
-        
-        echo "Limpando os arquivos temporários..."
-        docker exec k8s-local-control-plane rm /backend.tar
-        rm backend.tar
-        echo "Imagem do Backend injetada com sucesso total!"
+        echo "Injetando a imagem no Kind usando o Docker remoto..."
+        ./kind load docker-image meu-backend:${{ github.sha }} --name k8s-local
+        echo "Sucesso total no pipeline do Backend!"
