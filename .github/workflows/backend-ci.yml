@@ -13,8 +13,6 @@ jobs:
     - name: Checkout do Código
       uses: actions/checkout@v4
 
-    # Como o runner está na sua própria VM, o Docker já está instalado nativamente.
-    # Vamos apenas buildar a imagem usando o ID do commit como Tag única.
     - name: Build da Imagem Docker Backend
       run: |
         echo "Iniciando o build da imagem do backend..."
