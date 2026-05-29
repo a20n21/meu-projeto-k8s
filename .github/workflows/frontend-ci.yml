@@ -4,7 +4,7 @@ on:
   push:
     branches: [ main, master ]
     paths:
-      - 'frontend/**'
+      - 'frontend/**' # Só dispara se houver alterações na pasta frontend
 
 jobs:
   build-frontend:
@@ -14,10 +14,20 @@ jobs:
     - name: Checkout do Código
       uses: actions/checkout@v4
 
-    - name: Build da Imagem Docker Frontend
+    - name: Baixar o Kind Local na Pipeline do Runner
       run: |
-        docker build -t meu-frontend:${{ github.sha }} ./frontend
+        echo "Baixando o binário do Kind para a workspace do Runner..."
+        curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.22.0/kind-linux-amd64
+        chmod +x ./kind
 
-    - name: Injetar Imagem no Kind
+    - name: Build e Injeção no Kind via Rede
+      env:
+        DOCKER_HOST: tcp://192.168.100.11:2375
       run: |
-        /usr/local/bin/kind load docker-image meu-frontend:${{ github.sha }} --name k8s-local
+        echo "Fazendo o build remoto usando o Docker da VM do Kubernetes..."
+        docker build -t meu-frontend:${{ github.sha }} ./frontend
+        docker tag meu-frontend:${{ github.sha }} meu-frontend:latest
+        
+        echo "Injetando a imagem no Kind usando o Docker remoto..."
+        ./kind load docker-image meu-frontend:${{ github.sha }} --name k8s-local
+        echo "Sucesso total no pipeline do Frontend!"
