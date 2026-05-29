@@ -15,7 +15,7 @@ frontend:
   repository: meu-frontend
   tag: "d9badb0"
   containerPort: 80
-  nodePort: 30082
+  nodePort: 30800
   resources:
     requests:
       memory: "32Mi"
