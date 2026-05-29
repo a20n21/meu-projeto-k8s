@@ -102,7 +102,7 @@
             const senha = document.getElementById('login-pass').value;
             const erroEl = document.getElementById('login-erro');
 
-            fetch('/api/login', {
+            fetch('http://192.168.100.11:30080/api/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ usuario, senha })
@@ -136,7 +136,7 @@
 
         // 5. Buscar Funcionários no Backend
         function carregarFuncionarios() {
-            fetch('/api/funcionarios')
+            fetch('http://192.168.100.11:30080/api/funcionarios')
             .then(res => res.json())
             .then(data => {
                 document.getElementById('contador-func').innerText = `${data.length} Total`;
@@ -158,7 +158,7 @@
             const cargo = document.getElementById('cad-cargo').value;
             const departamento = document.getElementById('cad-dept').value;
 
-            fetch('/api/funcionarios', {
+            fetch('http://192.168.100.11:30080/api/funcionarios', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ nome, cargo, departamento })
