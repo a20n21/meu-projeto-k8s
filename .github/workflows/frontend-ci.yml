@@ -21,4 +21,4 @@ jobs:
 
     - name: Injetar Imagem no Cluster Kind
       run: |
-        /usr/local/bin/kind load docker-image meu-frontend:${{ github.sha }} --name k8s-local
+        /usr/bin/kind load docker-image meu-backend:${{ github.sha }} --name k8s-local
