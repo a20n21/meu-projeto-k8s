@@ -3,9 +3,9 @@ kind: Ingress
 metadata:
   name: meu-app-ingress
   namespace: default
-  annotations:
-    kubernetes.io/ingress.class: "nginx"
 spec:
+  # A MÁGICA ESTÁ AQUI: Diz explicitamente ao cluster qual controlador deve ler este arquivo
+  ingressClassName: nginx
   rules:
   - http:
       paths:
