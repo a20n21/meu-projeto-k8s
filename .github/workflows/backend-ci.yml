@@ -41,9 +41,16 @@ jobs:
         echo "4. Atualizando a tag do backend no values.yaml..."
         ./yq -i ".backend.tag = \"$TAG_SHA\"" meu-app-chart/values.yaml
         
-        echo "5. Comitando a nova tag de volta no repositório..."
+        echo "5. Comitando a nova tag de volta no repositório com Rebase..."
         git config --global user.name "GitHub Actions Bot"
         git config --global user.email "actions@github.com"
         git add meu-app-chart/values.yaml
-        git commit -m "chore(gitops): atualizando tag do backend para $TAG_SHA [skip ci]"
+        
+        # O || echo evita que a pipeline falhe se o arquivo já estiver atualizado
+        git commit -m "chore(gitops): atualizando tag do backend para $TAG_SHA [skip ci]" || echo "Sem alterações para comitar"
+        
+        # Puxa as alterações remotas mais recentes e reaplica o commit no topo (evita non-fast-forward)
+        git pull --rebase origin ${{ github.ref_name }}
+        
+        # Envia de forma segura
         git push origin ${{ github.ref_name }}
