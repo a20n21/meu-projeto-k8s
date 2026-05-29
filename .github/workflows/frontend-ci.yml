@@ -4,7 +4,7 @@ on:
   push:
     branches: [ main, master ]
     paths:
-      - 'frontend/**' # Só dispara se houver alterações na pasta frontend
+      - 'frontend/**'
 
 jobs:
   build-frontend:
@@ -20,14 +20,15 @@ jobs:
         docker build -t meu-frontend:${{ github.sha }} ./frontend
         docker tag meu-frontend:${{ github.sha }} meu-frontend:latest
 
-    - name: Exportar Imagem para TAR
+    - name: Baixar o Kind na Pipeline
       run: |
-        echo "Gerando o arquivo TAR da imagem do frontend..."
-        docker save meu-frontend:${{ github.sha }} -o frontend.tar
+        curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.22.0/kind-linux-amd64
+        chmod +x ./kind
 
-    - name: Injetar TAR no Cluster Kind
+    - name: Injetar Imagem no Cluster Kind
+      env:
+        KUBECONFIG: /home/k8s/.kube/config
       run: |
-        echo "Enviando o TAR para dentro do nó do Kind..."
-        sudo /usr/local/bin/kind load image-archive frontend.tar --name k8s-local
-        rm frontend.tar
+        echo "Enviando a nova imagem para dentro do nó do Kind..."
+        ./kind load docker-image meu-frontend:${{ github.sha }} --name k8s-local
         echo "Imagem do Frontend injetada com sucesso!"
