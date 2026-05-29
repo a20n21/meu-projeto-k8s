@@ -1,7 +1,7 @@
 backend:
   replicas: 1
   repository: meu-backend
-  tag: "latest" 
+  tag: "ba319d1"
   containerPort: 3000
   resources:
     requests:
@@ -10,11 +10,10 @@ backend:
     limits:
       memory: "128Mi"
       cpu: "200m"
-
 frontend:
   replicas: 1
   repository: meu-frontend
-  tag: "latest" 
+  tag: "latest"
   containerPort: 80
   nodePort: 30082
   resources:
