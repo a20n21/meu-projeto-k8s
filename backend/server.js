@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const PORT = 3000;
 
+// CRÍTICO: Ativa o interpretador de JSON para o Express ler o req.body
 app.use(express.json());
 
 // BANCO DE DADOS EM MEMÓRIA
@@ -10,14 +11,16 @@ let funcionarios = [
     { id: 2, nome: "Ana Silva", cargo: "Recrutadora Tech", departamento: "Recursos Humanos" }
 ];
 
-// MÁGICA AQUI: Rota raiz para o Kubernetes Probes (Startup/Liveness/Readiness) não darem 404
+// Rota raiz para o Kubernetes Probes
 app.get('/', (req, res) => {
-    res.status(200).json({ status: "ok", message: "Healthcheck da raiz respondendo!" });
+    res.status(200).json({ status: "ok", message: "Healthcheck respondendo!" });
 });
 
-// Rota de Login
+// Rota de Login corrigida
 app.post('/api/login', (req, res) => {
     const { usuario, senha } = req.body;
+
+    // Agora o usuario e senha vão chegar preenchidos aqui!
     if (usuario === 'admin' && senha === 'matias123') {
         return res.json({ success: true, token: "fake-jwt-token-rh-2026", mensagem: "Login efetuado com sucesso!" });
     } else {
