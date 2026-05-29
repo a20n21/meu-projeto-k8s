@@ -9,7 +9,6 @@ spec:
   rules:
   - http:
       paths:
-      # Regra 1: Tudo que começar com /api vai direto para o backend mantendo o caminho completo
       - path: /api
         pathType: Prefix
         backend:
@@ -17,7 +16,6 @@ spec:
             name: backend-service
             port:
               number: 3000
-      # Regra 2: A raiz e o resto do site vão para o frontend
       - path: /
         pathType: Prefix
         backend:
