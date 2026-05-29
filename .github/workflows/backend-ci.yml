@@ -27,6 +27,8 @@ jobs:
         chmod +x ./kind
 
     - name: Injetar Imagem no Cluster Kind
+      env:  
+        DOCKER_HOST: unix:///var/run/docker.sock
       run: |
         echo "Enviando a nova imagem para dentro do nó do Kind..."
         ./kind load docker-image meu-backend:${{ github.sha }} --name k8s-local
