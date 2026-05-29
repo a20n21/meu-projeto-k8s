@@ -1,7 +1,7 @@
 backend:
   replicas: 1
   repository: meu-backend
-  tag: "3648fa0"
+  tag: "f6c050e"
   containerPort: 3000
   resources:
     requests:
