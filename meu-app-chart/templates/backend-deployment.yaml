@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+spec:
+  replicas: {{ .Values.backend.replicas }}
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+      - name: backend-app
+        image: {{ .Values.backend.image }}
+        imagePullPolicy: Never
+        ports:
+        - containerPort: {{ .Values.backend.containerPort }}
+        resources:
+          requests:
+            memory: {{ .Values.backend.resources.requests.memory | quote }}
+            cpu: {{ .Values.backend.resources.requests.cpu | quote }}
+          limits:
+            memory: {{ .Values.backend.resources.limits.memory | quote }}
+            cpu: {{ .Values.backend.resources.limits.cpu | quote }}
+        startupProbe:
+          httpGet:
+            path: /
+            port: {{ .Values.backend.containerPort }}
+          failureThreshold: 6
+          periodSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /         
+            port: {{ .Values.backend.containerPort }}      
+          initialDelaySeconds: 0  
+          periodSeconds: 10       
+        readinessProbe:
+          httpGet:
+            path: /
+            port: {{ .Values.backend.containerPort }}
+          initialDelaySeconds: 0  
+          periodSeconds: 5

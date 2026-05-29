@@ -1,0 +1,28 @@
+name: Backend CI
+
+on:
+  push:
+    branches: [ main, master ]
+    paths:
+      - 'backend/**' 
+jobs:
+  build:
+    runs-on: self-hosted 
+
+    steps:
+    - name: Checkout do Código
+      uses: actions/checkout@v4
+
+    # Como o runner está na sua própria VM, o Docker já está instalado nativamente.
+    # Vamos apenas buildar a imagem usando o ID do commit como Tag única.
+    - name: Build da Imagem Docker Backend
+      run: |
+        echo "Iniciando o build da imagem do backend..."
+        docker build -t meu-backend:${{ github.sha }} ./backend
+        docker tag meu-backend:${{ github.sha }} meu-backend:latest
+        echo "Build concluído com sucesso!"
+
+    - name: Injetar Imagem no Cluster Kind
+      run: |
+        echo "Enviando a nova imagem para dentro do nó do Kind..."
+        kind load docker-image meu-backend:${{ github.sha }} --name k8s-local
