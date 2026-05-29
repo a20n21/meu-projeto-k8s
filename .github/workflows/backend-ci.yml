@@ -38,6 +38,7 @@ jobs:
           -v /home/k8s/meu-projeto-k8s:/apps \
           -w /apps \
           alpine/helm:3.12.0 \
-          upgrade --install meu-app ./meu-app-chart --set backend.tag=${{ github.sha }} --reuse-values
-          
-        echo "Sucesso total no pipeline do Backend!"
+          upgrade --install meu-app ./meu-app-chart \
+            --set backend.repository=meu-backend \
+            --set backend.tag=${{ github.sha }} \
+            --reuse-values
