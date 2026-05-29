@@ -5,13 +5,13 @@ metadata:
   namespace: default
   annotations:
     kubernetes.io/ingress.class: "nginx"
-    # MÁGICA DO REWRITE: Garante que o Ingress repasse o caminho correto para o Express
+    # Captura o que vem depois de /api e repassa limpo para o Express
     nginx.ingress.kubernetes.io/rewrite-target: /$2
 spec:
   rules:
   - http:
       paths:
-      # Regra do Frontend (Raiz do site)
+      # Regra do Frontend
       - path: /()(.*)
         pathType: ImplementationSpecific
         backend:
@@ -19,7 +19,7 @@ spec:
             name: frontend-service
             port:
               number: 80
-      # Regra do Backend (Pega /api, /api/login, /api/funcionarios, etc.)
+      # Regra do Backend (Pega /api, /api/login, /api/funcionarios)
       - path: /api(/|$)(.*)
         pathType: ImplementationSpecific
         backend:
