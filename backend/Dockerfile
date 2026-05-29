@@ -4,4 +4,4 @@ RUN echo 'const http = require("http"); http.createServer((req, res) => { res.wr
 EXPOSE 3000
 CMD ["node", "server.js"]
 
-#teste12
+
