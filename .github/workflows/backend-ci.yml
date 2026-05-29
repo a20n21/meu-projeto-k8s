@@ -18,18 +18,19 @@ jobs:
       run: |
         echo "Iniciando o build da imagem do backend..."
         docker build -t meu-backend:${{ github.sha }} ./backend
-        docker tag meu-backend:${{ github.sha }} meu-backend:latest
 
-    - name: Baixar o Kind Local na Pipeline
+    - name: Injetar Imagem Direto no Containerd do Kind
       run: |
-        echo "Baixando o binário do Kind..."
-        curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.22.0/kind-linux-amd64
-        chmod +x ./kind
-
-    - name: Injetar Imagem no Cluster Kind
-      env:
-        DOCKER_HOST: unix:///var/run/docker.sock
-      run: |
-        echo "Enviando a nova imagem para dentro do nó do Kind..."
-        ./kind load docker-image meu-backend:${{ github.sha }} --name k8s-local
-        echo "Imagem do Backend injetada com sucesso!"
+        echo "Exportando imagem para arquivo TAR..."
+        docker save meu-backend:${{ github.sha }} -o backend.tar
+        
+        echo "Copiando o arquivo TAR para dentro do nó do Kind..."
+        docker cp backend.tar k8s-local-control-plane:/backend.tar
+        
+        echo "Importando a imagem diretamente no runtime do Kubernetes (containerd)..."
+        docker exec k8s-local-control-plane ctr -n k8s.io images import /backend.tar
+        
+        echo "Limpando os arquivos temporários..."
+        docker exec k8s-local-control-plane rm /backend.tar
+        rm backend.tar
+        echo "Imagem do Backend injetada com sucesso total!"
