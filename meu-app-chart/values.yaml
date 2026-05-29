@@ -13,7 +13,7 @@ backend:
 frontend:
   replicas: 1
   repository: meu-frontend
-  tag: "0a4d824"
+  tag: "73c78f0"
   containerPort: 80
   nodePort: 30080
   resources:
