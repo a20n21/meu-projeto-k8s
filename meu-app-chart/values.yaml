@@ -1,6 +1,6 @@
 backend:
   replicas: 1
-  image: "meu-backend:local"
+  image: ""
   containerPort: 3000
   resources:
     requests:
@@ -12,7 +12,7 @@ backend:
 
 frontend:
   replicas: 1
-  image: "meu-frontend:local"
+  image: ""
   containerPort: 80
   nodePort: 30082
   resources:
