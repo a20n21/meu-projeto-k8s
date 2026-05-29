@@ -22,13 +22,14 @@ jobs:
 
     - name: Baixar o Kind Local na Pipeline
       run: |
-        echo "Baixando o binário do Kind isolado para a pipeline..."
+        echo "Baixando o binário do Kind..."
         curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.22.0/kind-linux-amd64
         chmod +x ./kind
 
     - name: Injetar Imagem no Cluster Kind
+      env:
+        DOCKER_HOST: unix:///var/run/docker.sock
       run: |
         echo "Enviando a nova imagem para dentro do nó do Kind..."
-        # Usamos o binário local './kind' que acabamos de baixar e garantimos o escopo do cluster
         ./kind load docker-image meu-backend:${{ github.sha }} --name k8s-local
         echo "Imagem do Backend injetada com sucesso!"
