@@ -69,7 +69,7 @@
                                 <tr>
                                     <th class="p-3">Nome</th>
                                     <th class="p-3">Cargo</th>
-                                    <th class="p-3">Departamentos</th>
+                                    <th class="p-3">Departamento</th>
                                 </tr>
                             </thead>
                             <tbody id="tabela-corpo">
@@ -90,24 +90,26 @@
         const viewDashboard = document.getElementById('view-dashboard');
         const btnLogout = document.getElementById('btn-logout');
         
-        // 1. Controle de Sessão no carregamento da página
         if (localStorage.getItem('userToken')) {
             exibirDashboard();
         }
 
-        // 2. Evento de Login
         document.getElementById('form-login').addEventListener('submit', function(e) {
             e.preventDefault();
             const usuario = document.getElementById('login-user').value;
             const senha = document.getElementById('login-pass').value;
             const erroEl = document.getElementById('login-erro');
 
-            fetch('http://192.168.100.11:30080/api/login', {
+            // GARANTINDO CHAVES EXATAS PARA O EXPRESS: usuario e senha
+            fetch('/api/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ usuario, senha })
+                body: JSON.stringify({ usuario: usuario, senha: senha })
             })
-            .then(res => { if(!res.ok) throw new Error(); return res.json(); })
+            .then(res => { 
+                if(!res.ok) throw new Error(); 
+                return res.json(); 
+            })
             .then(data => {
                 if(data.success) {
                     localStorage.setItem('userToken', data.token);
@@ -115,10 +117,11 @@
                     exibirDashboard();
                 }
             })
-            .catch(() => { erroEl.classList.remove('hidden'); });
+            .catch(() => { 
+                erroEl.classList.remove('hidden'); 
+            });
         });
 
-        // 3. Evento de Logout
         btnLogout.addEventListener('click', function() {
             localStorage.removeItem('userToken');
             viewDashboard.classList.add('hidden');
@@ -126,7 +129,6 @@
             viewLogin.classList.remove('hidden');
         });
 
-        // 4. Exibir o Painel e buscar dados
         function exibirDashboard() {
             viewLogin.classList.add('hidden');
             viewDashboard.classList.remove('hidden');
@@ -134,9 +136,8 @@
             carregarFuncionarios();
         }
 
-        // 5. Buscar Funcionários no Backend
         function carregarFuncionarios() {
-            fetch('http://192.168.100.11:30080/api/funcionarios')
+            fetch('/api/funcionarios')
             .then(res => res.json())
             .then(data => {
                 document.getElementById('contador-func').innerText = `${data.length} Total`;
@@ -151,14 +152,13 @@
             });
         }
 
-        // 6. Evento de Cadastro de Novo Funcionário
         document.getElementById('form-cadastro').addEventListener('submit', function(e) {
             e.preventDefault();
             const nome = document.getElementById('cad-nome').value;
             const cargo = document.getElementById('cad-cargo').value;
             const departamento = document.getElementById('cad-dept').value;
 
-            fetch('http://192.168.100.11:30080/api/funcionarios', {
+            fetch('/api/funcionarios', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ nome, cargo, departamento })
@@ -166,7 +166,7 @@
             .then(res => { if(!res.ok) throw new Error(); return res.json(); })
             .then(() => {
                 document.getElementById('form-cadastro').reset();
-                carregarFuncionarios(); // Atualiza a tabela na hora!
+                carregarFuncionarios();
             });
         });
     </script>
