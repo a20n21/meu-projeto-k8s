@@ -1,0 +1,24 @@
+name: Frontend CI
+
+on:
+  push:
+    branches: [ main, master ]
+    paths:
+      - 'frontend/**' 
+
+jobs:
+  build-frontend:
+    runs-on: self-hosted
+
+    steps:
+    - name: Checkout do Código
+      uses: actions/checkout@v4
+
+    - name: Build da Imagem Docker Frontend
+      run: |
+        docker build -t meu-frontend:${{ github.sha }} ./frontend
+        docker tag meu-frontend:${{ github.sha }} meu-frontend:latest
+
+    - name: Injetar Imagem no Cluster Kind
+      run: |
+        /usr/local/bin/kind load docker-image meu-frontend:${{ github.sha }} --name k8s-local

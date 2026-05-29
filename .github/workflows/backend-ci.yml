@@ -5,9 +5,10 @@ on:
     branches: [ main, master ]
     paths:
       - 'backend/**' 
+
 jobs:
-  build:
-    runs-on: self-hosted 
+  build-backend:
+    runs-on: self-hosted
 
     steps:
     - name: Checkout do Código
@@ -15,12 +16,9 @@ jobs:
 
     - name: Build da Imagem Docker Backend
       run: |
-        echo "Iniciando o build da imagem do backend..."
         docker build -t meu-backend:${{ github.sha }} ./backend
         docker tag meu-backend:${{ github.sha }} meu-backend:latest
-        echo "Build concluído com sucesso!"
 
     - name: Injetar Imagem no Cluster Kind
       run: |
-        echo "Enviando a nova imagem para dentro do nó do Kind..."
         /usr/local/bin/kind load docker-image meu-backend:${{ github.sha }} --name k8s-local
