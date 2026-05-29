@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: backend-app
-        image: "{{ .Values.backend.repository | default "meu-backend" }}:{{ .Values.backend.tag }}"
+        image: "{{ .Values.backend.repository }}:{{ .Values.backend.tag }}"
         imagePullPolicy: Never
         ports:
         - containerPort: {{ .Values.backend.containerPort }}

@@ -1,6 +1,7 @@
 backend:
   replicas: 1
-  image: ""
+  repository: meu-backend
+  tag: "latest" 
   containerPort: 3000
   resources:
     requests:
@@ -12,7 +13,8 @@ backend:
 
 frontend:
   replicas: 1
-  image: ""
+  repository: meu-frontend
+  tag: "latest" 
   containerPort: 80
   nodePort: 30082
   resources:
