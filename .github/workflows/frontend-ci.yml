@@ -20,8 +20,9 @@ jobs:
         curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.22.0/kind-linux-amd64
         chmod +x ./kind
 
-    - name: Build, Injeção e Deploy via Helm
+    - name: Build, Injeção e Deploy via Helm Containerizado
       env:
+        
         DOCKER_HOST: tcp://192.168.100.11:2375
       run: |
         echo "1. Fazendo o build remoto usando o Docker da VM do Kubernetes..."
@@ -30,6 +31,13 @@ jobs:
         echo "2. Injetando a imagem no Kind usando o Docker remoto..."
         ./kind load docker-image meu-frontend:${{ github.sha }} --name k8s-local
         
-        echo "3. Atualizando o Helm no cluster com a nova TAG..."
-        helm upgrade --install meu-app ./meu-app-chart --set frontend.tag=${{ github.sha }} --reuse-values
+        echo "3. Atualizando o Helm usando o volume local da VM do K8s..."
+        docker run --rm \
+          --network host \
+          -v /home/k8s/.kube:/root/.kube \
+          -v /home/k8s/meu-projeto-k8s:/apps \
+          -w /apps \
+          alpine/helm:3.12.0 \
+          upgrade --install meu-app ./meu-app-chart --set frontend.tag=${{ github.sha }} --reuse-values
+          
         echo "Sucesso total no pipeline do Frontend!"
