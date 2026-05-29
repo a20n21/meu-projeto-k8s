@@ -25,4 +25,4 @@ jobs:
     - name: Injetar Imagem no Cluster Kind
       run: |
         echo "Enviando a nova imagem para dentro do nó do Kind..."
-        kind load docker-image meu-backend:${{ github.sha }} --name k8s-local
+        /usr/local/bin/kind load docker-image meu-backend:${{ github.sha }} --name k8s-local
