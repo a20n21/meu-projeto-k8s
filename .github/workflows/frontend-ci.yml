@@ -16,9 +16,18 @@ jobs:
 
     - name: Build da Imagem Docker Frontend
       run: |
+        echo "Iniciando o build da imagem do frontend..."
         docker build -t meu-frontend:${{ github.sha }} ./frontend
         docker tag meu-frontend:${{ github.sha }} meu-frontend:latest
 
+    - name: Baixar e Configurar o Kind na Pipeline
+      run: |
+        echo "Baixando o binário oficial do Kind..."
+        curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.22.0/kind-linux-amd64
+        chmod +x ./kind
+
     - name: Injetar Imagem no Cluster Kind
       run: |
-        /usr/bin/kind load docker-image meu-backend:${{ github.sha }} --name k8s-local
+        echo "Enviando a nova imagem para dentro do nó do Kind..."
+        ./kind load docker-image meu-frontend:${{ github.sha }} --name k8s-local
+        echo "Imagem do Frontend injetada com sucesso!"
